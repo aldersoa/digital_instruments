@@ -1,0 +1,173 @@
+#N canvas 0 0 1680 1028 10;
+#N canvas 762 49 918 668 comport 0;
+#X obj 43 270 outlet;
+#X obj 43 17 loadbang;
+#X msg 43 161 pollintervall 10;
+#X text 56 78 set default poll time to 10ms since for most uses of
+serial at 115200 baud or less \, the data doesn't come any faster than
+every 10ms;
+#X connect 1 0 2 0;
+#X connect 2 0 0 0;
+#X restore 232 114 pd comport config;
+#X msg 217 28 ports;
+#X obj 218 147 comport 2 115200;
+#X msg 349 114 close;
+#N canvas 0 533 514 415 gate2 0;
+#X obj 33 154 spigot;
+#X obj 131 68 == 0;
+#X obj 107 8 inlet;
+#X obj 43 6 inlet;
+#X obj 32 197 outlet;
+#X obj 121 135 spigot;
+#X obj 121 187 outlet;
+#X obj 192 142 print;
+#X obj 91 166 f;
+#X obj 43 30 t f f b;
+#X obj 116 101 f;
+#X connect 0 0 4 0;
+#X connect 1 0 10 1;
+#X connect 2 0 1 0;
+#X connect 2 0 0 1;
+#X connect 3 0 9 0;
+#X connect 5 0 6 0;
+#X connect 5 0 8 1;
+#X connect 9 0 5 0;
+#X connect 9 1 0 0;
+#X connect 9 2 10 0;
+#X connect 10 0 5 1;
+#X restore 221 272 pd gate2;
+#X msg 286 245 0;
+#X msg 349 239 1;
+#X obj 222 295 sel 254 255;
+#X obj 252 322 t b 0, f 10;
+#X obj 310 486 tgl 15 0 empty empty empty 17 7 0 10 -262144 -1 -1 0
+1;
+#X obj 277 508 spigot;
+#X obj 256 406 expr ($f1*255) + $f2;
+#X msg 234 78 open \$1;
+#X floatatom 235 50 5 0 0 0 - - -;
+#N canvas 0 23 879 724 makeList 0;
+#N canvas 0 23 450 300 counter 0;
+#X obj 46 -2 inlet;
+#X obj 42 119 outlet;
+#X obj 111 2 inlet;
+#X floatatom 41 92 5 0 0 0 - - -;
+#X obj 47 19 bng 15 250 50 0 empty empty empty 17 7 0 10 -262144 -1
+-1;
+#X obj 111 21 - 1;
+#X obj 41 63 + 1, f 8;
+#X obj 50 40 f;
+#X connect 0 0 4 0;
+#X connect 2 0 5 0;
+#X connect 3 0 1 0;
+#X connect 4 0 7 0;
+#X connect 5 0 7 1;
+#X connect 6 0 3 0;
+#X connect 6 0 7 1;
+#X connect 7 0 6 0;
+#X restore 176 153 pd counter;
+#X msg 234 131 0;
+#X obj 144 208 spigot;
+#X obj 192 213 spigot;
+#X obj 259 209 spigot;
+#X obj 223 191 == 1;
+#X obj 124 244 pack 1 f f f;
+#X obj 87 139 t f f;
+#X obj 175 186 == 0;
+#X obj 290 186 == 2;
+#X obj 89 109 inlet;
+#X obj 234 108 inlet;
+#X obj 123 271 outlet;
+#X obj 27 193 inlet;
+#X obj 340 313 list store;
+#X floatatom 339 259 5 0 0 0 - - -;
+#X msg 339 283 append \$1;
+#X msg 377 226 bang;
+#X obj 340 334 print;
+#X obj 413 280 bng 15 250 50 0 empty empty empty 17 7 0 10 -262144
+-1 -1;
+#X obj 379 252 t b b;
+#X connect 0 0 5 0;
+#X connect 0 0 8 0;
+#X connect 0 0 9 0;
+#X connect 1 0 0 1;
+#X connect 2 0 6 1;
+#X connect 3 0 6 2;
+#X connect 4 0 6 3;
+#X connect 5 0 3 1;
+#X connect 6 0 12 0;
+#X connect 7 0 2 0;
+#X connect 7 0 3 0;
+#X connect 7 0 4 0;
+#X connect 7 1 0 0;
+#X connect 8 0 2 1;
+#X connect 9 0 4 1;
+#X connect 10 0 7 0;
+#X connect 11 0 1 0;
+#X connect 13 0 6 0;
+#X connect 14 0 18 0;
+#X connect 15 0 16 0;
+#X connect 16 0 14 0;
+#X connect 17 0 20 0;
+#X connect 19 0 14 1;
+#X connect 20 0 19 0;
+#X connect 20 1 14 0;
+#X restore 256 347 pd makeList;
+#X obj 172 362 tgl 15 0 empty empty empty 17 7 0 10 -262144 -1 -1 0
+1;
+#X obj 139 384 spigot;
+#X obj 350 214 loadbang;
+#X text 14 18 slipInput converts slip encoded serial data to PD messages
+sends over local network port 5006, f 31;
+#X text 15 85 To use: 1) click "ports" message and a list of available
+ports should print to the PD console. It may take 10-20 seconds 2)
+Find the port associated with your ESP32 and enter that number in the
+number box to create the message "open X" where X is the port number.
+E.g. 'open 2' 3) open DataMonitoring.pd (either by itself or as a subpatch
+in another patch) and see the incoming data, f 31;
+#X obj 20 271 bng 15 250 50 0 empty empty empty 17 7 0 10 -262144 -1
+-1;
+#X text 37 267 click if the PD console prints 'connection refused'
+, f 26;
+#X text 23 314 comment;
+#X obj 276 533 print OSCoutput;
+#X obj 138 409 print SLIPmsgs;
+#X obj 262 169 tgl 15 0 empty empty empty 17 7 0 10 -262144 -1 -1 0
+1;
+#X obj 229 191 spigot;
+#X obj 228 216 print rawSerial;
+#X obj 308 173 print com;
+#X obj 215 526 outlet;
+#X text 523 88 End byte = 255: Esc byte = 254 200 233 255 243 200 233
+254 255 243 255 20 233 255 243 200 222 254 250 200 222 254 254 250
+255;
+#X text 330 347 <- this is a wonky way of making a list;
+#X connect 0 0 2 0;
+#X connect 1 0 2 0;
+#X connect 2 0 4 0;
+#X connect 2 0 26 0;
+#X connect 2 1 28 0;
+#X connect 3 0 2 0;
+#X connect 4 0 7 0;
+#X connect 4 1 6 0;
+#X connect 4 1 14 1;
+#X connect 5 0 4 1;
+#X connect 6 0 4 1;
+#X connect 7 0 5 0;
+#X connect 7 1 8 0;
+#X connect 7 2 14 1;
+#X connect 8 0 14 0;
+#X connect 8 1 14 2;
+#X connect 9 0 10 1;
+#X connect 10 0 23 0;
+#X connect 11 0 10 0;
+#X connect 11 0 29 0;
+#X connect 12 0 2 0;
+#X connect 13 0 12 0;
+#X connect 14 0 16 0;
+#X connect 14 0 11 0;
+#X connect 15 0 16 1;
+#X connect 16 0 24 0;
+#X connect 17 0 6 0;
+#X connect 25 0 26 1;
+#X connect 26 0 27 0;
