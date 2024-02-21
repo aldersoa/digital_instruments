@@ -46,13 +46,19 @@ client = udp_client.SimpleUDPClient("127.0.0.1", 5005)
 # dispatcher in charge of executing functions in response to RECEIVED OSC messages
 dispatcher = Dispatcher()
 print("Sending data to port", 5005)
+
+print("hello")
   
 #sequence is in scale degrees
 sequences = [
 [0,1,2,3,4,5,6,7],
 [2,0,3,1,4,2,5,3],
 [0,4,7,11,14,18,14,7],
-[1,3,5,6,7,6,5,4]
+[1,3,5,6,7,6,5,4],
+[0,4,0,4,0,4,0,4],
+[3,5,7,11,13,11,7,5],
+[8,4,8,4,8,4,8,4],
+[12,13,14,15,12,13,14,15]
 ]
 
 def GetSequence(add, num):
