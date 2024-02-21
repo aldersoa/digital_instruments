@@ -46,58 +46,31 @@ client = udp_client.SimpleUDPClient("127.0.0.1", 5005)
 # dispatcher in charge of executing functions in response to RECEIVED OSC messages
 dispatcher = Dispatcher()
 print("Sending data to port", 5005)
-
-print("hello")
   
 #sequence is in scale degrees
 sequences = [
 [0,1,2,3,4,5,6,7],
 [2,0,3,1,4,2,5,3],
 [0,4,7,11,14,18,14,7],
-[1,3,5,6,7,6,5,4],
-[0,4,0,4,0,4,0,4],
-[3,5,7,11,13,11,7,5],
-[8,4,8,4,8,4,8,4],
-[12,13,14,15,12,13,14,15]
+[1,3,5,6,7,6,5,4]
 ]
 
 def GetSequence(add, num):
     t.update() #reset timeout 
     global sequences
 
-    address = '/sequence'
-
-    if num < len(sequences):
-        val = sequences[int(num)]
-    else:
-        print("sequence number out of range")
-        return 0
-
-    client.send_message(address, val)
-    print("sent")
-
-def GetSequence2(add, num):
-    t.update() #reset timeout 
-    global sequences
-
-    address = '/sequence2'
-
-    if num < len(sequences):
-        val = sequences[int(num)]
-    else:
-        print("sequence number out of range")
-        return 0
-
-    outputMsg = ['ONE', 0, 1]
-
     textNum = ['ONE', 'TWO', 'THREE', 'FOUR', 'FIVE', 'SIX', 'SEVEN', 'EIGHT']
 
-    for i in range(len(val)):
-        outputMsg[0] = textNum[i]
-        outputMsg[1] = (val[i]/27)*127
+    if num < len(sequences):
+        val = sequences[int(num)]
+    else:
+        print("sequence number out of range")
+        return 0
 
-        client.send_message(address, outputMsg)
-        print("sent", address, outputMsg)
+    for i in range(len(val)):
+        sendOSC('8steps', 1, textNum[i], (val[i]/27)*127)
+        print("sent", '8steps', textNum[i], (val[i]/27)*127, 1)
+        #Sequence
 
 def mirror(add, val):
     t.update() #reset timeout 
@@ -108,9 +81,14 @@ def cancelScript():
     t.cancel() #reset timeout 
 
 #look for incoming OSC messages
-dispatcher.map("/getSequence", GetSequence2)
+dispatcher.map("/getSequence", GetSequence)
 dispatcher.map("/paramName", mirror)
 dispatcher.map("/cancel", cancelScript)
+
+def sendOSC(module, instance, param, val):
+    client.send_message('/module', module)
+    msg = [param, val, instance]
+    client.send_message('/param', msg)
 
 
 ######################
