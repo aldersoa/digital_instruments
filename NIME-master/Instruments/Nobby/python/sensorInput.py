@@ -8,10 +8,10 @@ def processInput(*args):
 	# I like to write this out longform in case I need
 	#to change the order of sensors in a group
 	#print(address, val)
-	if address == 0: return("/pot0", 4095-val)
+	if address == 0: return("/pot0", val)
 	elif address == 1: return("/pot3", val)
 	elif address == 2: return("/pot2", 4095-val)
-	elif address == 3: return("/pot1", val)
+	elif address == 3: return("/pot1", 4095-val)
 	
 	elif 10 <= address <= 14:
 		#buttons

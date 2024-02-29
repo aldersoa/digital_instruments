@@ -14,7 +14,7 @@ from pythonosc.dispatcher import Dispatcher
 
 #m370 python modules
 import scripts.m370_communication as m370_communication
-comms = m370_communication.communication("serial", baudrate = 115200, defaultport="/dev/tty.SLAB_USBtoUART")
+comms = m370_communication.communication("serial", baudrate = 115200, defaultport="/dev/cu.usbserial-0224A2C1")
 
 import scripts.timeout as timeout
 #you can change the defaultport to the name your PC gives to the ESP32 serial port
@@ -88,7 +88,7 @@ async def loop():
                 else:
                     print("packet", currentMessage) #only for unrecognized input
 
-        time.sleep(0.001) 
+        time.sleep(.001) #.001
 
 
 async def init_main():
